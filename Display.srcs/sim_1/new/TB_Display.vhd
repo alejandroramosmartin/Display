@@ -39,7 +39,8 @@ architecture Behavioral of TB_Display is
 component Display is
  Port ( 
     CLK100MHZ : in std_logic;
--- reset : in std_logic;
+    reset : in std_logic;
+    number : in unsigned (9 downto 0);
     CA  : out std_logic;
     CB  : out std_logic;
     CC  : out std_logic;
@@ -53,7 +54,8 @@ component Display is
 end component;
 
 signal    CLK100MHZ :  std_logic;
--- reset : in std_logic;
+signal    reset :  std_logic := '0';
+signal    number :  unsigned (9 downto 0) := "0010010110";
 signal    CA  :  std_logic;
 signal    CB  :  std_logic;
 signal    CC  :  std_logic;
@@ -69,8 +71,8 @@ begin
 DISPLAY_1: Display 
  Port Map( 
     CLK100MHZ => CLK100MHZ,
--- reset : in std_logic;
-    CA  =>CA,
+    reset => reset,
+    number => number,
     CB  =>CB,
     CC  =>CC,
     CD  =>CD,

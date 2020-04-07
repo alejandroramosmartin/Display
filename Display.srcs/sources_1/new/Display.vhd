@@ -34,7 +34,8 @@ use IEEE.NUMERIC_STD.ALL;
 entity Display is
  Port ( 
     CLK100MHZ : in std_logic;
--- reset : in std_logic;
+    reset : in std_logic;
+    number : in unsigned (9 downto 0);
     CA  : out std_logic;
     CB  : out std_logic;
     CC  : out std_logic;
@@ -53,7 +54,7 @@ signal counter, next_counter : unsigned (1 downto 0) := "00";
 
 signal toDisplay,centenas,decenas,unidades : unsigned (3 downto 0) := x"0";
 signal aux_centenas,next_centenas,aux_decenas, next_decenas,aux_unidades : unsigned (9 downto 0) := (others => '0');
-signal number, aux,next_aux : unsigned (9 downto 0) := "0010010110";
+signal aux,next_aux : unsigned (9 downto 0) := (others=> '0');
 signal dec20,next_dec20,cent20,next_cent20 : unsigned (19 downto 0) := (others => '0');
 
 signal display7 : STD_LOGIC_VECTOR (6 downto 0) := (others=>'0');

@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2017.2 (64-bit)
+# SW Build 1909853 on Thu Jun 15 18:39:09 MDT 2017
+# IP Build 1909766 on Thu Jun 15 19:58:00 MDT 2017
+# Start of session at: Mon Apr  6 21:02:19 2020
+# Process ID: 1532
+# Current directory: C:/Users/Carlos/Vivado-Workspace/Display/Display.runs/synth_1
+# Command line: vivado.exe -log Display.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source Display.tcl
+# Log file: C:/Users/Carlos/Vivado-Workspace/Display/Display.runs/synth_1/Display.vds
+# Journal file: C:/Users/Carlos/Vivado-Workspace/Display/Display.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source Display.tcl -notrace

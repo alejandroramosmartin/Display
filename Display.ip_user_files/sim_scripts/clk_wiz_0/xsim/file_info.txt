@@ -1,0 +1,1 @@
+clk_wiz_0_sim_netlist.vhdl,vhdl,xil_defaultlib,../../../../Display.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_sim_netlist.vhdl,incdir="../../../../Display.srcs/sources_1/ip/clk_wiz_0"

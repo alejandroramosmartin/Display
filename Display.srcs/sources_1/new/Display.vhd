@@ -35,7 +35,7 @@ entity Display is
  Port ( 
     CLK100MHZ : in std_logic;
     reset : in std_logic;
-    number : in unsigned (9 downto 0);
+    number : in unsigned (9 downto 0); --numero de segundos que quedan de grabación
     CA  : out std_logic;
     CB  : out std_logic;
     CC  : out std_logic;
@@ -49,13 +49,10 @@ entity Display is
 end Display;
 
 architecture Behavioral of Display is
-signal counter, next_counter : unsigned (1 downto 0) := "00";
+signal counter, next_counter : unsigned (0 downto 0) := "0";
 
-
-signal toDisplay,centenas,decenas,unidades : unsigned (3 downto 0) := x"0";
-signal aux_centenas,next_centenas,aux_decenas, next_decenas,aux_unidades : unsigned (9 downto 0) := (others => '0');
-signal aux,next_aux : unsigned (9 downto 0) := (others=> '0');
-signal dec20,next_dec20,cent20,next_cent20 : unsigned (19 downto 0) := (others => '0');
+signal toDisplay, decenas, unidades : unsigned (3 downto 0) := (others => '0');
+signal aux_decenas, next_decenas, aux_unidades, next_unidades : unsigned (9 downto 0) := (others => '0');
 
 signal display7 : STD_LOGIC_VECTOR (6 downto 0) := (others=>'0');
 signal aux_AN, next_AN   : STD_LOGIC_VECTOR (7 downto 0) := (others=> '1');
@@ -78,7 +75,7 @@ port map(
  );
 
 with toDisplay select display7 <=
-	 --Descodificacion de numeros
+--Descodificacion de numeros
 "1001111"  when "0001", -- 1
 "0010010"  when "0010", -- 2
 "0000110"  when "0011", -- 3
@@ -95,50 +92,42 @@ process(clk10MHZ)
 begin
     if(clk10MHZ'event and clk10MHZ='1') then
         counter <= next_counter;
-        aux <= next_aux;
         aux_decenas <= next_decenas;
-        aux_centenas <= next_centenas;
-        cent20 <= next_cent20;
-        dec20 <= next_dec20;
+        aux_unidades <= next_unidades;
     end if;
 end process;
 
-process(aux,number, aux_centenas, aux_decenas, dec20,cent20)
+-- Divide en decenas y unidades el valor de number
+process(number, aux_decenas)
 begin
-next_aux <= number;
-next_centenas <= aux/100;
-next_cent20 <= aux_centenas*100;
-next_aux <= number - cent20(9 downto 0);
-next_decenas <= aux/10;
-next_dec20 <=  aux_decenas*10;
-next_aux <= number - dec20(9 downto 0);
-aux_unidades <= aux;
+
+next_decenas <= number/10;
+next_unidades <= number - aux_decenas*10;
 
 end process;
 
-process(counter,centenas,decenas,unidades)
+-- Activa en cada flanco de reloj el display con la cifra correspondiente a las decenas o unidades
+process(counter,decenas,unidades)
 begin
     next_AN <= x"FF";
     toDisplay <= (others => '1');
-    next_counter <= counter +1;
-
-    if (counter = "01") then
-        toDisplay <= centenas;
-        next_AN <= x"FB";
-    elsif (counter = "10") then
+    next_counter <= counter + 1;
+    
+    if (counter = "0") then
         toDisplay <= decenas;
         next_AN <= x"FD";
-    elsif (counter = "11") then
+    elsif (counter = "1") then
         toDisplay<= unidades;
         next_AN <= x"FE";
     end if;
     
 end process;
 
-centenas <=aux_centenas(3 downto 0);
-decenas  <=aux_decenas(3 downto 0);
-unidades <=aux_unidades(3 downto 0);
+-- Asignación de las señales de control del display
+decenas <= aux_decenas(3 downto 0);
+unidades <= aux_unidades(3 downto 0);
 
+-- Asignación de las salidas
 CA <= display7(6);
 CB <= display7(5);
 CC <= display7(4);
